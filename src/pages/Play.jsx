@@ -53,6 +53,7 @@ function Play() {
   }
 
   const handleGuessSubmit = () => {
+    dispatch({ type: "BUTTON_CLICKED", value: true });
     if (state.playerGuess.toUpperCase() === state.word) {
       const remainingLetters = state.word.split('').filter(letter => !state.guessedLetters.includes(letter)).length
       // Ajoute 2 points + 1 point par lettre restante pour une bonne supposition
@@ -66,6 +67,7 @@ function Play() {
   }
 
   const handleEndGame = () => {
+    dispatch({ type: "BUTTON_CLICKED", value: false });
     localStorage.setItem('score', state.score);
     dispatch({ type: "GOVER", value: true });
     window.location.reload();
@@ -115,7 +117,7 @@ function Play() {
       <input type="text" value={state.playerGuess} onChange={e =>
         dispatch({ type: "PGUESS", value: e.target.value })} />
       <button onClick={handleGuessSubmit}>Submit Guess</button>
-      {state.gameOver && (state.word.split('').every(letter => state.guessedLetters.includes(letter)) || state.playerGuess.toUpperCase() === state.word) && (
+      {state.gameOver && state.isButtonClicked && (state.word.split('').every(letter => state.guessedLetters.includes(letter)) || state.playerGuess.toUpperCase() === state.word) && (
         <div>
           <p>Vous avez gagné!</p>
           <input type="text" value={state.winnerName} onChange={handleNameChange} placeholder="Entrez votre nom" />
