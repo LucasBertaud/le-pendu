@@ -111,14 +111,17 @@ function Play() {
   }
 
   const handleEndGame = () => {
+    // Save the current score before reloading the page
+    localStorage.setItem('currentScore', state.score);
     window.location.reload();
   }
 
   useEffect(() => {
-    // const savedScore = localStorage.getItem('score');
-    // if (savedScore) {
-    //   dispatch({ type: "SCORE", value: parseInt(savedScore) });
-    // }
+    // Get the saved score and set it as the initial score
+    const savedScore = localStorage.getItem('currentScore');
+    if (savedScore) {
+      dispatch({ type: "SCORE", value: parseInt(savedScore) });
+    }
     fetchRandomWord();
     window.addEventListener("keyup", (e) => {
       if (document.activeElement !== document.querySelector(".game__text")) {
@@ -145,6 +148,8 @@ function Play() {
         { name: state.winnerName, score: state.score }
       ]));
     }
+    // Reset the current score to 0
+    localStorage.setItem('currentScore', 0);
     window.location.reload();
   }
 
