@@ -3,7 +3,7 @@ import Stats from './pages/Stats'
 import Notfound from './pages/Notfound'
 import Home from './pages/Home'
 import Nav from './components/Nav'
-import './App.css'
+import './styles/index.scss';
 import { Route, Routes } from 'react-router-dom'
 
 function App() {
