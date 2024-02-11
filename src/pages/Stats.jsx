@@ -5,19 +5,22 @@ function Stats() {
   const [state] = useContext(PlayContext);
   const [winners, setWinners] = useState([]);
   useEffect(() => {
-    let scoreData = localStorage.getItem('score');
-    if (scoreData && scoreData.startsWith('[') && scoreData.endsWith(']')) {
-      let arrayScore = [];
-      JSON.parse(scoreData).forEach((element, i) => {
-        const sliceScore = scoreData.slice(i+1);
-        if (sliceScore.find(x => x.name.toLowerCase() == element.name.toLowerCase())) {
-          var a = sliceScore.find(x => x.name.toLowerCase() == element.name.toLowerCase());
-          a.score += element.score;
-          return;
-        }
-        arrayScore.push(element);
-      });
-      setWinners(arrayScore);
+    const scoreData = JSON.parse(localStorage.getItem('score'));
+    let arrayScore = [];
+    if (scoreData != null) {
+      scoreData.forEach((element, i) => {
+          const sliceScore = scoreData.slice(i+1);
+          if (scoreData.length > 1) {
+            if (sliceScore.find(x => x.name.toLowerCase() == element.name.toLowerCase())) {
+              var a = sliceScore.find(x => x.name.toLowerCase() == element.name.toLowerCase());
+              a.score += element.score;
+              return;
+            }
+          }
+          arrayScore.push(element);
+        });
+  
+        setWinners(arrayScore);
     }
   }, []);
 

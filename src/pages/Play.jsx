@@ -111,10 +111,10 @@ function Play() {
   }
 
   useEffect(() => {
-    const savedScore = localStorage.getItem('score');
-    if (savedScore) {
-      dispatch({ type: "SCORE", value: parseInt(savedScore) });
-    }
+    // const savedScore = localStorage.getItem('score');
+    // if (savedScore) {
+    //   dispatch({ type: "SCORE", value: parseInt(savedScore) });
+    // }
     fetchRandomWord();
     window.addEventListener("keyup", (e) => {
       if (document.activeElement !== document.querySelector(".game__text")) {
