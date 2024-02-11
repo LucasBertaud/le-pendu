@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { PlayContext } from '../main'
 import congratulation from '../scripts/congratulation.js';
-
+import replace from 'replace-special-characters';
 
 function Play() {
   const [state, dispatch] = useContext(PlayContext);
@@ -11,9 +11,13 @@ function Play() {
       .then(response => response.json())
       .then(data => {
         if (data.length) {
-          const randomWord = data[Math.floor(Math.random() * data.length)].toUpperCase()
+          const randomWord = data[Math.floor(Math.random() * data.length)].toUpperCase();
+          const randomWordWithoutSpecial = replace(randomWord);
+          if (randomWordWithoutSpecial.includes("-")) {
+            dispatch({ type: "GLETTERS", value: [...state.guessedLetters, "-"] });
+          }
           console.log(`word : ${randomWord}`) // Affiche le mot aléatoire dans la console
-          dispatch({ type: "WORD", value: randomWord });
+          dispatch({ type: "WORD", value: randomWordWithoutSpecial });
         }
       })
   }
