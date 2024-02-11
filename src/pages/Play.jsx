@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { PlayContext } from '../main'
 import congratulation from '../scripts/congratulation.js';
 
+
 function Play() {
   const [state, dispatch] = useContext(PlayContext);
 
@@ -97,7 +98,7 @@ function Play() {
       const remainingLetters = state.word.split('').filter(letter => !state.guessedLetters.includes(letter)).length
       // Ajoute 2 points + 1 point par lettre restante pour une bonne supposition
       dispatch({ type: "SCORE", value: state.score + 2 + remainingLetters })
-      startNewGame()
+      dispatch({ type: "GWIN", value: true });
     } else if (state.playerGuess.toUpperCase() !== state.word && state.playerGuess !== '') {
       // Soustrait 2 points pour une mauvaise supposition
       dispatch({ type: "SCORE", value: state.score - 2 })
@@ -106,7 +107,6 @@ function Play() {
   }
 
   const handleEndGame = () => {
-    localStorage.setItem('score', state.score);
     window.location.reload();
   }
 
@@ -124,17 +124,23 @@ function Play() {
   }, [])
 
   const handleRetry = () => {
-    localStorage.setItem('score', state.score);
     window.location.reload();
   }
 
   const handleSave = () => {
-    let previousScores = localStorage.getItem('score');
-    let scores = previousScores ? JSON.parse(previousScores) : [];
-    localStorage.setItem('score', JSON.stringify([
-      ...scores,
-      { name: state.winnerName, score: state.score }
-    ]));
+    const scoreData = JSON.parse(localStorage.getItem('score'));
+    if (scoreData != null) {
+      console.log(scoreData);
+      localStorage.setItem('score', JSON.stringify([
+        ...scoreData,
+        { name: state.winnerName, score: state.score }
+      ]));
+    }
+    else {
+      localStorage.setItem('score', JSON.stringify([
+        { name: state.winnerName, score: state.score }
+      ]));
+    }
     window.location.reload();
   }
 
@@ -167,7 +173,7 @@ function Play() {
               <p className="game__score">Score: {state.score}</p>
               <input type="text" value={state.playerGuess} onChange={e =>
                 dispatch({ type: "PGUESS", value: e.target.value })} className="game__text" />
-              <button onClick={handleGuessSubmit} className="game__submit">Submit Guess</button>
+              <button onClick={handleGuessSubmit} className="game__submit">Soumettre une supposition</button>
             </div>
           )
           : state.gameWin && !state.gameOver ?
