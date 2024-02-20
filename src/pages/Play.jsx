@@ -158,31 +158,33 @@ function Play() {
       {
         !state.gameWin && !state.gameOver ?
           (
-            <div className="game">
-              <h1 className="game__title">Le Pendu</h1>
-              <div id="alphabet" className="game__alphabet">
-                {alphabet.map(letter => (
-                  <button
-                    key={letter}
-                    onClick={() => handleLetter(letter)}
-                    disabled={state.guessedLetters.includes(letter)}
-                    id={letter}
-                    className="game__letter"
-                  >
-                    {letter}
-                  </button>
-                ))}
+            <div className='center-game'>
+              <div className="game">
+                <h1 className="game__title">Le Pendu</h1>
+                <div id="alphabet" className="game__alphabet">
+                  {alphabet.map(letter => (
+                    <button
+                      key={letter}
+                      onClick={() => handleLetter(letter)}
+                      disabled={state.guessedLetters.includes(letter)}
+                      id={letter}
+                      className="game__letter"
+                    >
+                      {letter}
+                    </button>
+                  ))}
+                </div>
+                <p className="game__word">
+                  Mot: {state.word.split('').map(letter => (state.guessedLetters.includes(normalizeLetter(letter)) ? normalizeLetter(letter) : '_')).join(' ')}
+                </p>
+                {state.wrongGuesses > 0 && (
+                  <img style={{ width: '250px', height: '300px', padding: '10px' }} src={hangmanSteps[state.wrongGuesses]} alt="Hangman" className="game__image" />
+                )}
+                <p className="game__score">Score: {state.score}</p>
+                <input type="text" value={state.playerGuess} onChange={e =>
+                  dispatch({ type: "PGUESS", value: e.target.value })} className="game__text" />
+                <button onClick={handleGuessSubmit} className="game__submit">Soumettre une supposition</button>
               </div>
-              <p className="game__word">
-                Mot: {state.word.split('').map(letter => (state.guessedLetters.includes(normalizeLetter(letter)) ? normalizeLetter(letter) : '_')).join(' ')}
-              </p>
-              {state.wrongGuesses > 0 && (
-                <img style={{ width: '250px', height: '300px', padding: '10px' }} src={hangmanSteps[state.wrongGuesses]} alt="Hangman" className="game__image" />
-              )}
-              <p className="game__score">Score: {state.score}</p>
-              <input type="text" value={state.playerGuess} onChange={e =>
-                dispatch({ type: "PGUESS", value: e.target.value })} className="game__text" />
-              <button onClick={handleGuessSubmit} className="game__submit">Soumettre une supposition</button>
             </div>
           )
           : state.gameWin && !state.gameOver ?
